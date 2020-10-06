@@ -1,10 +1,11 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, View, Text} from 'react-native';
 import Dashboard from './component/dashboard';
 import Viewer from './component/Pages/viewR';
+import {} from 'react-native';
+import LogIn from './component/login';
 
 const App: () => React$Node = () => {
-  return <Viewer />;
+  return <LogIn />;
 };
 
 export default App;
