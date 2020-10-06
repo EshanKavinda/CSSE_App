@@ -1,14 +1,7 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
+import Dashboard from './component/dashboard';
+import Viewer from './component/Pages/viewR';
 import {} from 'react-native';
-
 import LogIn from './component/login';
 
 const App: () => React$Node = () => {
