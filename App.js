@@ -5,8 +5,10 @@ import {} from 'react-native';
 import LogIn from './component/login';
 import AddItem from './component/Pages/addItem';
 import Apitest from './component/apiTest';
+import Details from './component/Pages/deleteR';
+
 
 const App: () => React$Node = () => {
-  return <LogIn />;
+  return <Dashboard />;
 };
 export default App;
