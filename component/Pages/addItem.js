@@ -19,39 +19,15 @@ import Icon from 'react-native-vector-icons/Feather';
 import DatePicker from 'react-native-datepicker';
 import axios from 'axios';
 
-const list = [
-  {
-    name: 'Screw Drawer',
-    avatar_url:
-      'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-    subtitle: 'inneco brand',
-  },
-  {
-    name: 'Drill',
-    avatar_url:
-      'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-
-    subtitle: 'power tools',
-  },
-];
-
 const AddItem = () => {
   const [visible, setVisible] = useState(false);
+  const [quantityCalc, setQuantityCalc] = useState(0);
   const [itemData, setItemData] = useState([]);
-
-  // const fetchItemData = () => {
-  //   axios
-  //     .post('http://10.101.147.59:3001/item/getbycategory', {categoryId: 1})
-  //     .then((res) => {
-  //       setItemData(res.data);
-  //       console.log(res.data);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
+  const [oneItem, setOneItem] = useState([]);
 
   const fetchData = () => {
     axios
-      .post('http://10.106.91.233:3001/item/getbycategory', {categoryId: 1})
+      .post('http://10.104.159.140:3001/item/getbycategory', {categoryId: 1})
       .then((res) => {
         setItemData(res.data);
         console.log(res.data);
@@ -63,13 +39,35 @@ const AddItem = () => {
     fetchData();
   }, []);
 
+  const reqprams = {
+    manager: 'manager',
+    site: 'site',
+    storeLocation: 'location',
+    dueDate: 'date',
+    // email: userEmail,
+    // password: userPassword,
+  };
+
+  const addRequisition = () => {
+    console.log('Button Clicked....');
+    axios
+      .post('http://10.104.159.140:3001/requisition/add', reqprams)
+      .then((res) => {
+        console.log(res.data);
+        setVisible(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <View style={{margin: 10}}>
       <ScrollView>
-        <Text h5 style={{textAlign: 'center'}}>
+        <Text h4 style={{textAlign: 'center'}}>
           Add Items
         </Text>
-
+        <SupplierFilterDropDownPicker />
         <CategoryFilterDropDownPicker />
         {itemData.map((l, i) => (
           <ListItem
@@ -81,7 +79,6 @@ const AddItem = () => {
               marginBottom: 5,
               borderRadius: 10,
             }}>
-            {/* <Avatar source={{uri: l.avatar_url}} /> */}
             <ListItem.Content>
               <ListItem.Title>{l.item_name}</ListItem.Title>
               <ListItem.Subtitle>{l.description}</ListItem.Subtitle>
@@ -89,7 +86,7 @@ const AddItem = () => {
             <Button
               title="Add"
               onPress={() => {
-                setVisible(true);
+                setVisible(true), setOneItem(l);
               }}
             />
           </ListItem>
@@ -102,25 +99,46 @@ const AddItem = () => {
           onTouchOutside={() => {
             setVisible(false);
           }}>
-          <DialogTitle title="Choose Quantity"></DialogTitle>
+          <DialogTitle title="Add Requisision"></DialogTitle>
           <DialogContent>
-            <Text style={{marginTop: 20}}>Item Name: Drill</Text>
-            <Text style={{marginTop: 20}}>Unit price: $80</Text>
-            <Text style={{marginTop: 20}}>Quantity (pieces)</Text>
-            <Input placeholder="Quantity" />
-            <Text
-              style={{
-                marginBottom: 10,
-                marginRight: 'auto',
-                marginLeft: 'auto',
-                fontSize: 20,
-              }}>
-              Price: $0
-            </Text>
-            <Text>Discription</Text>
-            <Input placeholder="Discription" disabled />
-            <DatePickerforDuedate />
-            <LocationDropDownPicker />
+            <ScrollView>
+              <Text style={{marginTop: 20, fontSize: 20}}>
+                Item Name: {oneItem.item_name}
+              </Text>
+              <Text style={{marginTop: 20, fontSize: 15}}>
+                Unit price: {oneItem.price}
+              </Text>
+              <Text style={{marginTop: 20}}>Quantity (pieces)</Text>
+              <Input
+                placeholder="Quantity"
+                onChangeText={setQuantityCalc}
+                keyboardType="numeric"
+              />
+              <Text
+                style={{
+                  marginBottom: 10,
+                  marginRight: 'auto',
+                  marginLeft: 'auto',
+                  fontSize: 20,
+                }}>
+                Price: {quantityCalc * oneItem.price}
+              </Text>
+              <Text>Discription</Text>
+              <Input
+                value={oneItem.description}
+                placeholder="Discription"
+                disabled
+              />
+              <DatePickerforDuedate />
+              <LocationDropDownPicker />
+
+              <Button
+                title="submit"
+                onPress={() => {
+                  addRequisition();
+                }}
+              />
+            </ScrollView>
           </DialogContent>
         </Dialog>
       </View>
@@ -130,23 +148,96 @@ const AddItem = () => {
 export default AddItem;
 
 const CategoryFilterDropDownPicker = () => {
+  const [categoryData, setCategoryData] = useState([]);
+
+  const getCategoryData = () => {
+    axios
+      .get('http://10.104.159.140:3001/category/getall')
+      .then((res) => {
+        console.log(res.data);
+        setCategoryData(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    getCategoryData();
+  }, []);
+
   return (
     <View style={{marginBottom: 40}}>
       <Text style={{marginBottom: 5}}>Filter</Text>
       <DropDownPicker
         items={[
           {
-            label: 'UK',
-            value: 'uk',
-            icon: () => <Icon name="flag" size={18} color="#900" />,
+            label: 'Tools',
+            value: 'Tools',
           },
           {
-            label: 'France',
-            value: 'france',
-            icon: () => <Icon name="flag" size={18} color="#900" />,
+            label: 'Stationary',
+            value: 'Stationary',
+          },
+          {
+            label: 'Hardware',
+            value: 'Hardware',
+          },
+          {
+            label: 'Power tools',
+            value: 'Power tools',
           },
         ]}
         placeholder="select category"
+        containerStyle={{height: 40}}
+        style={{backgroundColor: '#fafafa'}}
+        itemStyle={{
+          justifyContent: 'flex-start',
+        }}
+        dropDownStyle={{backgroundColor: '#fafafa'}}
+      />
+    </View>
+  );
+};
+
+const SupplierFilterDropDownPicker = () => {
+  const [supplierData, setSupplierData] = useState([]);
+
+  // const getSupplierData = () => {
+  //   axios
+  //     .get('http://10.104.159.140:3001/category/getall')
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setSupplierData(res.data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
+  // useEffect(() => {
+  //   getSupplierData();
+  // }, []);
+
+  return (
+    <View style={{marginBottom: 40}}>
+      <Text style={{marginBottom: 5}}>Filter</Text>
+      <DropDownPicker
+        items={[
+          {
+            label: 'Chanuka',
+            value: 'Chanuka',
+          },
+          {
+            label: 'Eshan',
+            value: 'Eshan',
+          },
+          {
+            label: 'Lakshan',
+            value: 'Lakshan',
+          },
+          {
+            label: 'Dinuli',
+            value: 'Dinuli',
+          },
+        ]}
+        placeholder="select supplier"
         containerStyle={{height: 40}}
         style={{backgroundColor: '#fafafa'}}
         itemStyle={{
@@ -165,14 +256,16 @@ const LocationDropDownPicker = () => {
       <DropDownPicker
         items={[
           {
-            label: 'UK',
-            value: 'uk',
-            icon: () => <Icon name="flag" size={18} color="#900" />,
+            label: 'Kandy',
+            value: 'Kandy',
           },
           {
-            label: 'France',
-            value: 'france',
-            icon: () => <Icon name="flag" size={18} color="#900" />,
+            label: 'Jaffna',
+            value: 'Jaffna',
+          },
+          {
+            label: 'Colombo',
+            value: 'Colombo',
           },
         ]}
         placeholder="select location"

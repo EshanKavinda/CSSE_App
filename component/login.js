@@ -4,7 +4,9 @@ import {Button, Input, Text} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import Dashboard from './dashboard';
+// import {createStackNavigator} from '@react-navigation/stack';
 
+// const Stack = createStackNavigator();
 
 const LogIn = () => {
   const [user, setUser] = useState({});
@@ -19,7 +21,7 @@ const LogIn = () => {
   const login = () => {
     console.log('Button Clicked..............................................');
     axios
-      .post('http://192.168.43.186:3001/login', req)
+      .post('http://10.104.159.140:3001/login', req)
       .then((res) => {
         console.log(res.data.error);
         console.log('login method xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
