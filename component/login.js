@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import Dashboard from './dashboard';
 
-
 const LogIn = () => {
   const [user, setUser] = useState({});
   const [userEmail, setUserEmail] = useState('');
@@ -19,7 +18,7 @@ const LogIn = () => {
   const login = () => {
     console.log('Button Clicked..............................................');
     axios
-      .post('http://192.168.43.186:3001/login', req)
+      .post('http://192.168.43.169:3001/login', req)
       .then((res) => {
         console.log(res.data.error);
         console.log('login method xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
