@@ -1,7 +1,6 @@
 import React from 'react';
-import {Button, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {Header, Card} from 'react-native-elements';
+import {Button, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Header, Card, PricingCard} from 'react-native-elements';
 
 const Dashboard = () => {
   return (
@@ -12,18 +11,58 @@ const Dashboard = () => {
           style: {color: '#fff', fontSize: 20, fontWeight: 'bold'},
         }}
       />
-
-      <Card>
-        <Button title="Add Requisitions" />
-      </Card>
-      <Card>
-        <Button title="Manage Requisitions" />
-      </Card>
-      <Card>
-        <Button title="View Orders" />
-      </Card>
+      <ScrollView>
+        <Card>
+          <Text style={{alignSelf: 'center'}}>Project Summary</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Card>
+              <Text>Expenses</Text>
+              <Text>Null</Text>
+            </Card>
+            <Card>
+              <Text>Budget</Text>
+              <Text>Null</Text>
+            </Card>
+            <Card>
+              <Text>Deadline</Text>
+              <Text>Null</Text>
+            </Card>
+          </View>
+        </Card>
+        <PricingCard
+          title="Add Requisitions"
+          titleStyle={styles.tstyle}
+          button={{title: 'GO TO'}}
+        />
+        <View style={{flexDirection: 'row'}}>
+          <PricingCard
+            containerStyle={{flex: 1}}
+            title="View Delivery"
+            titleStyle={styles.tstyle}
+            button={{title: 'GO TO'}}
+          />
+          <PricingCard
+            containerStyle={{flex: 1}}
+            title="View Orders"
+            titleStyle={styles.tstyle}
+            button={{title: 'GO TO'}}
+          />
+        </View>
+        <PricingCard
+          title="Manage Requisitions"
+          titleStyle={styles.tstyle}
+          button={{title: 'GO TO'}}
+        />
+      </ScrollView>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  tstyle: {
+    fontSize: 30,
+    marginBottom: 0,
+  },
+});
 
 export default Dashboard;
