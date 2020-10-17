@@ -37,11 +37,13 @@ const users = [
   },
 ];
 
-import React, {Component} from 'react';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import React from 'react';
+import {ScrollView, View, StyleSheet, Text} from 'react-native';
 import {Card, ListItem} from 'react-native-elements';
 
-const Viewer = () => {
+// import { Container } from './styles';
+
+const FirstD = () => {
   return (
     <View>
       <ScrollView style={styles.margin}>
@@ -54,6 +56,7 @@ const Viewer = () => {
                   title={u.name}
                   titleStyle={styles.tStyle}
                   rightElement={<Text>Null</Text>}
+                  leftElement={<Text>{u.name}</Text>}
                 />
               </Card>
             );
@@ -73,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Viewer;
+export default FirstD;
