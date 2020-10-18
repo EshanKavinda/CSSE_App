@@ -46,6 +46,7 @@ const FirstD = ({navigation}) => {
           })}
         </Card>
       </ScrollView>
+      {/* show delivery Notice */}
       <View>
         <Dialog
           width={300}
