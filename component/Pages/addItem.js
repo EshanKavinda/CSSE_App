@@ -8,7 +8,6 @@ import {
   Avatar,
   Card,
 } from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import Dialog, {
   DialogContent,
   DialogTitle,
