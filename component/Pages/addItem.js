@@ -1,3 +1,4 @@
+// import elements
 import React, {useState, useEffect} from 'react';
 import {View, ToastAndroid, ScrollView} from 'react-native';
 import {
@@ -8,7 +9,6 @@ import {
   Avatar,
   Card,
 } from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import Dialog, {
   DialogContent,
   DialogTitle,
@@ -18,19 +18,24 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
 import DatePicker from 'react-native-datepicker';
 import axios from 'axios';
+import {NetworkInfo} from 'react-native-network-info';
 
+// Add Item main function
 const AddItem = () => {
   const [visible, setVisible] = useState(false);
   const [quantityCalc, setQuantityCalc] = useState(0);
   const [itemData, setItemData] = useState([]);
   const [oneItem, setOneItem] = useState([]);
+  const [date, setDate] = useState('');
+  const [location, setLocation] = useState('');
+  const [cat, setCat] = useState(1);
 
   const fetchData = () => {
     axios
-      .post('http://10.104.159.140:3001/item/getbycategory', {categoryId: 1})
+      .post('http://192.168.43.186:3001/item/getbycategory', {categoryId: cat})
       .then((res) => {
         setItemData(res.data);
-        console.log(res.data);
+        console.log(cat);
       })
       .catch((err) => console.log(err));
   };
@@ -39,22 +44,34 @@ const AddItem = () => {
     fetchData();
   }, []);
 
+  //requisition parameters
   const reqprams = {
     manager: 'manager',
     site: 'site',
-    storeLocation: 'location',
-    dueDate: 'date',
-    // email: userEmail,
-    // password: userPassword,
+    storeLocation: location,
+    dueDate: date,
   };
 
+  //cart parameters
+  const reqpramscart = {
+    itemId: oneItem.item_id,
+    requisitionId: 1,
+    quantity: quantityCalc,
+  };
+
+  //function of add data to requisition table and cart table
   const addRequisition = () => {
     console.log('Button Clicked....');
     axios
-      .post('http://10.104.159.140:3001/requisition/add', reqprams)
+      .post('http://192.168.43.186:3001/requisition/add', reqprams)
       .then((res) => {
         console.log(res.data);
-        setVisible(false);
+        axios
+          .post('http://192.168.43.186:3001/cart/additem', reqpramscart)
+          .then((res) => {
+            console.log(res.data);
+            setVisible(false);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -68,7 +85,7 @@ const AddItem = () => {
           Add Items
         </Text>
         <SupplierFilterDropDownPicker />
-        <CategoryFilterDropDownPicker />
+        <CategoryFilterDropDownPicker setCat={setCat} />
         {itemData.map((l, i) => (
           <ListItem
             key={i}
@@ -99,7 +116,7 @@ const AddItem = () => {
           onTouchOutside={() => {
             setVisible(false);
           }}>
-          <DialogTitle title="Add Requisision"></DialogTitle>
+          <DialogTitle title="Add Requisition"></DialogTitle>
           <DialogContent>
             <ScrollView>
               <Text style={{marginTop: 20, fontSize: 20}}>
@@ -129,8 +146,8 @@ const AddItem = () => {
                 placeholder="Discription"
                 disabled
               />
-              <DatePickerforDuedate />
-              <LocationDropDownPicker />
+              <DatePickerforDuedate setDate={setDate} />
+              <LocationDropDownPicker setLocation={setLocation} />
 
               <Button
                 title="submit"
@@ -147,12 +164,13 @@ const AddItem = () => {
 };
 export default AddItem;
 
-const CategoryFilterDropDownPicker = () => {
+// category dropdown function
+const CategoryFilterDropDownPicker = ({setCat}) => {
   const [categoryData, setCategoryData] = useState([]);
 
   const getCategoryData = () => {
     axios
-      .get('http://10.104.159.140:3001/category/getall')
+      .get('http://192.168.43.186:3001/category/getall')
       .then((res) => {
         console.log(res.data);
         setCategoryData(res.data);
@@ -164,28 +182,16 @@ const CategoryFilterDropDownPicker = () => {
     getCategoryData();
   }, []);
 
+  let arrd = categoryData.map((cat, i) => ({
+    label: cat.category_name,
+    value: i,
+  }));
+
   return (
     <View style={{marginBottom: 40}}>
       <Text style={{marginBottom: 5}}>Filter</Text>
       <DropDownPicker
-        items={[
-          {
-            label: 'Tools',
-            value: 'Tools',
-          },
-          {
-            label: 'Stationary',
-            value: 'Stationary',
-          },
-          {
-            label: 'Hardware',
-            value: 'Hardware',
-          },
-          {
-            label: 'Power tools',
-            value: 'Power tools',
-          },
-        ]}
+        items={arrd}
         placeholder="select category"
         containerStyle={{height: 40}}
         style={{backgroundColor: '#fafafa'}}
@@ -193,17 +199,19 @@ const CategoryFilterDropDownPicker = () => {
           justifyContent: 'flex-start',
         }}
         dropDownStyle={{backgroundColor: '#fafafa'}}
+        onChangeItem={(i) => setCat(1)}
       />
     </View>
   );
 };
 
+//supplier dropdown function
 const SupplierFilterDropDownPicker = () => {
   const [supplierData, setSupplierData] = useState([]);
 
   // const getSupplierData = () => {
   //   axios
-  //     .get('http://10.104.159.140:3001/category/getall')
+  //     .get('http://192.168.43.186:3001/category/getall')
   //     .then((res) => {
   //       console.log(res.data);
   //       setSupplierData(res.data);
@@ -249,7 +257,8 @@ const SupplierFilterDropDownPicker = () => {
   );
 };
 
-const LocationDropDownPicker = () => {
+//location ropdown function
+const LocationDropDownPicker = ({setLocation}) => {
   return (
     <View style={{marginBottom: 40, marginTop: 40}}>
       <Text style={{marginBottom: 5}}>Location</Text>
@@ -275,19 +284,21 @@ const LocationDropDownPicker = () => {
           justifyContent: 'flex-start',
         }}
         dropDownStyle={{backgroundColor: '#fafafa'}}
+        onChangeItem={(i) => setLocation(i.value)}
       />
     </View>
   );
 };
 
-const DatePickerforDuedate = () => {
-  const [date, setDate] = useState('2020-05-10');
+// select due date function
+const DatePickerforDuedate = ({setDate}) => {
+  const [date1, setDate1] = useState('2020-05-10');
   return (
     <View>
       <Text>Due Date</Text>
       <DatePicker
         style={{width: 200}}
-        date={date}
+        date={date1}
         mode="date"
         placeholder="select date"
         format="YYYY-MM-DD"
@@ -309,6 +320,7 @@ const DatePickerforDuedate = () => {
         }}
         onDateChange={(date) => {
           setDate(date);
+          setDate1(date);
         }}
       />
     </View>
