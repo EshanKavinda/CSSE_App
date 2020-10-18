@@ -6,7 +6,7 @@ import {Card, ListItem, Button} from 'react-native-elements';
 import Dialog, {DialogContent, DialogTitle} from 'react-native-popup-dialog';
 import Axios from 'axios';
 
-const FirstD = () => {
+const FirstD = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [deliverData, setDeliverData] = useState([]);
   const [OneDeliverData, setOneDeliverData] = useState([]);
@@ -102,6 +102,9 @@ const FirstD = () => {
               <Button
                 title="Back To Dashboard"
                 containerStyle={{margin: 10, flex: 1}}
+                onPress={() => {
+                  navigation.push('Dashboard');
+                }}
               />
             </ScrollView>
           </DialogContent>
