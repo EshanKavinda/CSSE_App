@@ -14,6 +14,7 @@ const FView = (navigation) => {
   const req = {
     rid: onePurchseData.requistion_id,
   };
+  //accept purchase method for accept button
   const acceptPurchase = () => {
     Axios.post('http://192.168.43.169:3001/purchase/updateA', req)
       .then((res) => {
@@ -23,6 +24,7 @@ const FView = (navigation) => {
         console.log(err);
       });
   };
+  //reject purchase method for reject button
   const RejectPurchase = () => {
     Axios.post('http://192.168.43.169:3001/purchase/updateR', req)
       .then((res) => {
@@ -32,7 +34,7 @@ const FView = (navigation) => {
         console.log(err);
       });
   };
-
+  //loading data
   const getPercheseData = () => {
     Axios.get('http://192.168.43.169:3001/purchase/getpendingpurchase')
       .then((res) => {
@@ -67,6 +69,7 @@ const FView = (navigation) => {
           })}
         </Card>
       </ScrollView>
+      {/*pending purchase orders*/}
       <View>
         <Dialog
           width={300}

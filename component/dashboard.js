@@ -7,25 +7,27 @@ const Dashboard = ({navigation}) => {
     <>
       <Header
         centerComponent={{
-          text: 'Project Name',
+          text: 'Build Bridge',
           style: {color: '#fff', fontSize: 20, fontWeight: 'bold'},
         }}
       />
       <ScrollView>
         <Card>
-          <Text style={{alignSelf: 'center'}}>Project Summary</Text>
+          <Text style={{alignSelf: 'center', fontWeight: 'bold'}}>
+            Project Summary
+          </Text>
           <View style={{flexDirection: 'row'}}>
             <Card>
-              <Text>Expenses</Text>
-              <Text>Null</Text>
+              <Text style={{fontSize: 12, fontWeight: 'bold'}}>Expenses</Text>
+              <Text>20 Lak</Text>
             </Card>
             <Card>
-              <Text>Budget</Text>
-              <Text>Null</Text>
+              <Text style={{fontSize: 12, fontWeight: 'bold'}}>Budget</Text>
+              <Text>100 Lak</Text>
             </Card>
             <Card>
-              <Text>Deadline</Text>
-              <Text>Null</Text>
+              <Text style={{fontSize: 12, fontWeight: 'bold'}}>Deadline</Text>
+              <Text>2021-06-10</Text>
             </Card>
           </View>
         </Card>
