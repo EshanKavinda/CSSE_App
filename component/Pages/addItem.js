@@ -32,7 +32,7 @@ const AddItem = () => {
 
   const fetchData = () => {
     axios
-      .post('http://192.168.43.186:3001/item/getbycategory', {categoryId: cat})
+      .post('http://192.168.43.169:3001/item/getbycategory', {categoryId: cat})
       .then((res) => {
         setItemData(res.data);
         console.log(cat);

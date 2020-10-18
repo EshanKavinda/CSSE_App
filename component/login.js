@@ -8,7 +8,7 @@ import Dashboard from './dashboard';
 
 // const Stack = createStackNavigator();
 
-const LogIn = () => {
+const LogIn = ({navigation}) => {
   const [user, setUser] = useState({});
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -63,6 +63,7 @@ const LogIn = () => {
             title="Log In"
             onPress={() => {
               login();
+              navigation.push('Dashboard');
             }}
           />
         </View>

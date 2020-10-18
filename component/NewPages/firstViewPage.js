@@ -6,7 +6,7 @@ import {ScrollView, View, StyleSheet, Text} from 'react-native';
 import {Card, ListItem, Button} from 'react-native-elements';
 import Dialog, {DialogContent, DialogTitle} from 'react-native-popup-dialog';
 
-const FView = () => {
+const FView = (navigation) => {
   const [visible, setVisible] = useState(false);
   const [purchseData, setPercheseData] = useState([]);
   const [onePurchseData, setOnePercheseData] = useState([]);
